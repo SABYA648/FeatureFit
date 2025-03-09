@@ -12,10 +12,10 @@ from textwrap import dedent
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# --- Mobile-Friendly Meta, CSS & Google Analytics ---
+# --- Inject GA Code Directly in the HTML (Visible in View Source) ---
+# This block outputs a <head> element with the GA code so that it appears in the page source.
 st.markdown("""
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Google tag (gtag.js) -->
+<head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YBR866PTCR"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -23,6 +23,12 @@ st.markdown("""
   gtag('js', new Date());
   gtag('config', 'G-YBR866PTCR');
 </script>
+</head>
+""", unsafe_allow_html=True)
+
+# --- Mobile-Friendly Meta & CSS ---
+st.markdown("""
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 /* Responsive typography and layout for mobile devices */
 body {
@@ -52,9 +58,14 @@ def generate_analysis(feature_name, industry, business_goal, business_model, con
     You are an experienced product management assistant analyzing product features.
     Given the following inputs, provide a detailed analysis using the RICE framework (Reach, Impact, Confidence, Effort) and risk assessment, and then provide recommendations for MVP and monetization.
     
-    Additionally, evaluate how much the provided input and your output analysis make sense and provide an overall confidence score on a scale from 1 to 10. Provide a realistic assessment of the confidence based on the inputs. Include a detailed technical explanation of how the analysis was derived.
+    Additionally, evaluate the provided input and your analysis and provide an overall confidence score on a scale from 0 to 10, where:
+    - 0 indicates the inputs are complete gibberish or nonsensical,
+    - A half-baked or unsubstantiated idea should score around 5 or higher,
+    - 10 means full confidence in the analysis.
+    Provide an unbiased analysis that accurately reflects how sensible the idea is.
+    Include a detailed technical explanation of how the analysis was derived.
     
-    If you detect that the provided data is nonsensical or merely test data (BS), include a mild roast in the "roast" field.
+    If you detect that the provided data is nonsensical or merely test data, include a mild roast in the "roast" field.
     
     Use the following inputs:
     - Feature Name: {feature_name}
