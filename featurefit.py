@@ -75,7 +75,13 @@ def generate_analysis(feature_name, industry, business_goal, business_model, con
       "recommended_monetization": string,
       "overall_confidence": float,
       "technical_explanation": string,
-      "roast": string
+      "roast": string,
+      "swot_analysis": {{
+          "Strengths": string,
+          "Weaknesses": string,
+          "Opportunities": string,
+          "Threats": string
+      }}
     }}
     Only return valid JSON.
     """)
@@ -384,6 +390,61 @@ if submitted and feature_name and industry:
             "Target": ["Startups", "SMBs", "Large Enterprises"]
         })
         st.dataframe(pricing_model.style.highlight_max(props="background-color: #e9f5f3"), use_container_width=True)
+
+    # --- SWOT Analysis ---
+    with st.expander("📝 SWOT Analysis", expanded=True):
+        swot = analysis.get("swot_analysis", {})
+        strengths = swot.get("Strengths", "N/A")
+        weaknesses = swot.get("Weaknesses", "N/A")
+        opportunities = swot.get("Opportunities", "N/A")
+        threats = swot.get("Threats", "N/A")
+        swot_table = f"""
+        <style>
+            .swot-table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 1rem;
+            }}
+            .swot-table th, .swot-table td {{
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }}
+            .swot-table th {{
+                background-color: #2a9d8f;
+                color: white;
+            }}
+            .swot-table td {{
+                background-color: #e9f5f3;
+            }}
+            .swot-table .opportunities {{
+                background-color: #f4a261;
+            }}
+            .swot-table .threats {{
+                background-color: #ff4b4b;
+                color: white;
+            }}
+        </style>
+        <table class="swot-table">
+            <tr>
+                <th>Strengths</th>
+                <th>Weaknesses</th>
+            </tr>
+            <tr>
+                <td>{strengths}</td>
+                <td>{weaknesses}</td>
+            </tr>
+            <tr>
+                <th>Opportunities</th>
+                <th>Threats</th>
+            </tr>
+            <tr>
+                <td class="opportunities">{opportunities}</td>
+                <td class="threats">{threats}</td>
+            </tr>
+        </table>
+        """
+        st.markdown(swot_table, unsafe_allow_html=True)
 
 elif submitted:
     st.error("❗ Please fill required fields: Feature Name and Industry")
