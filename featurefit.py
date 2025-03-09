@@ -71,6 +71,14 @@ def generate_analysis(feature_name, industry, business_goal, business_model, con
         "competition": string
       }},
       "mvp_recommendation": string,
+      "roadmap": [
+          {{
+              "Phase": string,
+              "Timeline": string,
+              "Milestone": string,
+              "Success Metric": string
+          }}
+      ],
       "industry_specific_considerations": string,
       "recommended_monetization": string,
       "overall_confidence": float,
@@ -140,7 +148,8 @@ with st.form("feature_inputs"):
     # Mandatory inputs: Feature Name and Industry with default test values
     col1, col2 = st.columns(2)
     with col1:
-        feature_name = st.text_input("Feature Name*", value="AI-Enhanced Fraud Detection")
+        # Changed default to include a FinTech keyword ("Transaction") for high confidence analysis
+        feature_name = st.text_input("Feature Name*", value="AI-Powered Transaction Fraud Detection")
     with col2:
         industry_option = st.selectbox(
             "Industry*",
@@ -345,7 +354,7 @@ if submitted and feature_name and industry:
         )
         st.plotly_chart(heatmap_fig, use_container_width=True)
 
-    # --- MVP Recommendation ---
+    # --- MVP Recommendation & Roadmap ---
     with st.expander("🚀 MVP Roadmap", expanded=True):
         st.markdown(f"""
         <div style="background-color:#f0f2f6; padding:1rem; border-radius:10px;">
@@ -353,18 +362,12 @@ if submitted and feature_name and industry:
             <p style="color:#2a9d8f; font-size:1.1rem">📌 {analysis['mvp_recommendation']}</p>
         </div>
         """, unsafe_allow_html=True)
-        roadmap = pd.DataFrame({
-            "Phase": ["Research", "Prototype", "Test", "Launch"],
-            "Timeline": ["Week 1-2", "Week 3-4", "Week 5", "Week 6"],
-            "Milestone": ["Validate Concept", "Core Features", "User Testing", "Public Release"],
-            "Success Metric": [
-                "70%+ Positive Feedback", 
-                "90% Completion", 
-                "50% Retention", 
-                "100 Active Users"
-            ]
-        })
-        st.dataframe(roadmap.style.background_gradient(cmap='Blues'), use_container_width=True)
+        # Use the roadmap provided by GPT
+        if "roadmap" in analysis and analysis["roadmap"]:
+            roadmap_df = pd.DataFrame(analysis["roadmap"])
+            st.dataframe(roadmap_df.style.background_gradient(cmap='Blues'), use_container_width=True)
+        else:
+            st.info("No roadmap data provided by GPT.")
 
     # --- Industry Insights ---
     with st.expander("🏭 Industry Insights", expanded=True):
