@@ -1,0 +1,154 @@
+2025-03-23 16:56:19,735 - __main__ - INFO - Application started
+2025-03-23 16:56:19,736 - __main__ - INFO - ProjectManager initialized
+2025-03-23 16:56:29,824 - __main__ - INFO - Application started
+2025-03-23 16:56:29,828 - __main__ - INFO - Project 'dwedeewe' created successfully
+2025-03-23 17:05:28,810 - __main__ - INFO - Application started
+2025-03-23 17:05:34,950 - __main__ - INFO - Application started
+2025-03-23 17:05:35,396 - openai - INFO - error_code=invalid_api_key error_message='Incorrect API key provided: sk-proj-********************************************************************************************************************************************************UKoA. You can find your API key at https://platform.openai.com/account/api-keys.' error_param=None error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2025-03-23 17:06:57,419 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:06:59,748 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:06:59,754 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:16:33,945 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:16:35,821 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:16:35,828 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:24:08,336 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:24:10,338 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:24:10,343 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:25:17,233 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:25:19,092 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:25:19,098 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:26:39,602 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:26:41,609 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:26:41,616 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:30:32,701 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:30:34,545 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:30:34,551 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:39:31,626 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:39:38,568 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:39:38,573 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:39:49,917 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:40:40,239 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:40:40,248 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:44:48,265 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:44:50,735 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:44:50,741 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:44:58,670 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:46:07,735 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:46:09,851 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:46:09,856 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:46:19,976 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:46:22,071 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:46:22,078 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:47:31,091 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:47:55,975 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:47:55,983 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:50:26,228 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:50:28,355 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:50:28,361 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:58:25,726 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:58:39,261 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:58:39,269 - __main__ - INFO - Using mock data for analysis
+2025-03-23 17:59:21,389 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:59:46,052 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:59:47,190 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:59:50,022 - __main__ - INFO - Application started in demo mode
+2025-03-23 17:59:50,024 - __main__ - INFO - Using mock data for analysis
+2025-03-23 18:32:50,326 - __main__ - INFO - Application started in demo mode
+2025-03-23 18:32:52,110 - __main__ - INFO - Application started in demo mode
+2025-03-23 18:32:52,117 - __main__ - INFO - Using mock data for analysis
+2025-03-23 18:33:16,131 - __main__ - INFO - Application started in demo mode
+2025-03-23 18:33:19,662 - __main__ - INFO - Application started in demo mode
+2025-03-23 18:33:19,669 - __main__ - INFO - Using mock data for analysis
+2025-03-25 01:05:25,644 - __main__ - INFO - Application started in demo mode
+2025-03-25 01:05:28,511 - __main__ - INFO - Application started in demo mode
+2025-03-25 01:05:28,517 - __main__ - INFO - Using mock data for analysis
+2025-03-25 01:07:15,358 - __main__ - INFO - Application started in live mode
+2025-03-25 01:07:17,562 - __main__ - INFO - Application started in live mode
+2025-03-25 01:07:18,682 - openai - INFO - error_code=model_not_found error_message='The model `gpt-o1` does not exist or you do not have access to it.' error_param=None error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2025-03-25 01:08:58,896 - __main__ - INFO - Application started in live mode
+2025-03-25 01:09:00,895 - __main__ - INFO - Application started in live mode
+2025-03-25 01:12:15,363 - __main__ - INFO - Application started in live mode
+2025-03-25 01:12:17,428 - __main__ - INFO - Application started in live mode
+2025-03-25 01:14:34,762 - __main__ - INFO - Application started in live mode
+2025-03-25 01:18:45,775 - __main__ - INFO - Application started in live mode
+2025-03-25 01:18:47,700 - __main__ - INFO - Application started in live mode
+2025-03-25 01:22:21,786 - __main__ - INFO - Application started in live mode
+2025-03-25 01:22:24,086 - __main__ - INFO - Application started in live mode
+2025-03-25 17:18:29,591 - __main__ - INFO - Application started in live mode
+2025-03-25 17:18:32,274 - __main__ - INFO - Application started in live mode
+2025-03-25 17:18:33,885 - openai - INFO - error_code=model_not_found error_message='The model `gpt-o1` does not exist or you do not have access to it.' error_param=None error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2025-03-25 17:20:02,273 - __main__ - INFO - Application started in live mode
+2025-03-25 17:20:04,140 - __main__ - INFO - Application started in live mode
+2025-03-25 17:20:55,053 - __main__ - INFO - Application started in live mode
+2025-03-25 17:20:56,956 - __main__ - INFO - Application started in live mode
+2025-03-25 17:22:57,541 - __main__ - INFO - Application started in live mode
+2025-03-25 17:23:01,405 - __main__ - INFO - Application started in live mode
+2025-03-25 17:23:01,773 - openai - INFO - error_code=None error_message='max_tokens is too large: 20000. This model supports at most 16384 completion tokens, whereas you provided 20000.' error_param=max_tokens error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2025-03-25 17:23:16,136 - __main__ - INFO - Application started in live mode
+2025-03-25 17:23:18,354 - __main__ - INFO - Application started in live mode
+2025-03-25 17:52:24,173 - __main__ - INFO - Application started in live mode
+2025-03-25 17:52:28,123 - __main__ - INFO - Application started in live mode
+2025-03-25 18:06:30,208 - __main__ - INFO - Application started in live mode
+2025-03-25 18:06:34,647 - __main__ - INFO - Application started in live mode
+2025-03-25 18:06:56,672 - __main__ - ERROR - Error during API call: Expecting value: line 1 column 1 (char 0)
+2025-03-25 18:10:01,034 - __main__ - INFO - Application started in simplified single-call mode
+2025-03-25 18:10:03,633 - __main__ - INFO - Application started in simplified single-call mode
+2025-03-25 18:15:58,419 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:16:00,703 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:29:11,913 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:33:04,400 - __main__ - INFO - Reverting to original multi-call layout from beginning of the task
+2025-03-25 18:34:07,591 - __main__ - INFO - Reverting to original multi-call layout from beginning of the task
+2025-03-25 18:36:25,507 - __main__ - INFO - Reverting to original multi-call layout from beginning of the task
+2025-03-25 18:42:39,809 - __main__ - INFO - Reverting to original multi-call layout from beginning of the task
+2025-03-25 18:44:57,318 - __main__ - INFO - Reverting to original multi-call layout from beginning of the task
+2025-03-25 18:45:06,115 - __main__ - INFO - Reverting to original multi-call layout from beginning of the task
+2025-03-25 18:47:55,278 - __main__ - INFO - Reverting to original multi-call layout from beginning of the task
+2025-03-25 18:48:07,388 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:48:43,632 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:48:47,006 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:48:48,737 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:51:16,468 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:52:53,376 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 18:54:19,468 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:02:12,640 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:02:15,309 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:06:19,732 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:06:21,927 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:09:03,134 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:09:04,843 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:11:07,568 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:11:10,008 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:13:03,399 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:13:18,384 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:13:23,841 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:16:17,498 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:16:23,850 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:19:12,274 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:19:15,211 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:22:35,571 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:22:46,185 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:22:47,962 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:23:46,966 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:25:20,279 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:25:24,814 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:26:05,797 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:26:06,759 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:28:18,334 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:28:25,574 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:29:20,252 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:29:29,209 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:33:27,698 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:33:30,411 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:33:32,416 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:35:22,188 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:36:05,626 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:37:15,863 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:37:21,227 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:38:03,855 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:38:08,657 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:40:54,280 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:41:01,755 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:43:00,278 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:43:03,004 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:45:23,190 - __main__ - INFO - Application started in multi-call mode
+2025-03-25 19:45:26,943 - __main__ - INFO - Application started in multi-call mode
