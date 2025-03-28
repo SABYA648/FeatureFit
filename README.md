@@ -301,36 +301,89 @@ streamlit run beta.py
 
 Below is a high-level overview of the functionalities implemented in <code>beta.py</code>:
 
-1. <strong>AI-Powered Analysis (generate_visual_analysis)</strong>  
+1. **Environment Setup & Configuration**
+   • Configures logging with detailed formatting (timestamp, name, level, message)
+   • Uses dotenv for secure API key management
+   • Implements proper error handling for API key validation
+
+2. **Industry & Business Model Options**
+   • Supports 7 industry categories: FinTech, EdTech, SaaS, Healthcare, E-commerce, AI Tools, and Custom
+   • Includes 35 business models ranging from B2B SaaS to Professional Services
+   • Allows custom industry input for specialized use cases
+
+3. **AI-Powered Analysis (generate_visual_analysis)**  
    • Uses OpenAI GPT-4 to parse user-provided feature details and produce a comprehensive JSON output including RICE scoring, MoSCoW priority, SWOT analysis, risk assessment, and more.  
    • Constructs an in-depth prompt guiding GPT-4 to provide relevant insights in a structured format.  
 
-2. <strong>Confidence Score & Improvement Guidance</strong>  
+4. **Confidence Score & Improvement Guidance**  
    • Displays an overall confidence score for each feature on a 0-10 scale, color-coded to indicate risk or potential.  
    • Provides guidelines for improving the confidence level by suggesting additional data or context to fill knowledge gaps.  
 
-3. <strong>RICE & Priority Visualization</strong>  
+5. **RICE & Priority Visualization**  
    • Generates RICE scoring using the GPT-generated values (Reach, Impact, Confidence, and Effort).  
    • Displays a radar chart and gauge to visualize priority and overall scoring.  
 
-4. <strong>Risk & MVP Roadmap</strong>  
+6. **Risk & MVP Roadmap**  
    • Outlines potential risks around technical complexity, business model, adoption, and competition.  
    • Suggests an MVP roadmap via phases, timelines, milestones, and success metrics for systematic feature rollout.  
 
-5. <strong>SWOT Analysis</strong>  
+7. **SWOT Analysis**  
    • Provides strengths, weaknesses, opportunities, and threats specific to the given feature or project context.  
    • Presents a visually styled table for quick scanning of each SWOT category.  
 
-6. <strong>Clarifying Questions</strong>  
+8. **Clarifying Questions**  
    • If GPT identifies uncertainties, it prompts clarifying questions. Users can input answers to refine analysis.  
    • Ensures that each subsequent iteration is more accurate and context-aware.  
 
-7. <strong>Streamlit UI & Responsive Layout</strong>  
+9. **Streamlit UI & Responsive Layout**  
    • Leverages Streamlit for user input forms, dynamic visualizations (Plotly charts), and modular sidebars.  
    • Tailors the interface for both desktop and mobile devices with floating action buttons, color-coded statuses, and clear user prompts.  
 
 These features together enable teams to evaluate and refine ideas rapidly, ensuring each feature aligns with strategic objectives while account for user feedback and risk-level considerations.
 
 ---
+
+### Technical Implementation Details
+
+1. **Logging Configuration**
+```python
+logging.basicConfig(
+    filename='app.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+```
+
+2. **Session State Management**
+   • Maintains persistent state for:
+     - Feature name
+     - Industry selection
+     - Business goal
+     - Business model
+     - Clarifications
+     - Analysis data
+
+3. **Visualization Specifications**
+   • RICE Radar Chart: Uses Plotly polar line chart with custom styling
+   • Priority Gauge: Implements custom ranges (0-40, 40-70, 70-100) with color coding
+   • SWOT Analysis: Custom HTML/CSS table with color-coded sections
+   • Mobile-responsive design with 900x600 resolution support
+
+4. **UI/UX Implementation**
+   • Floating action buttons with fixed positioning for quick access
+   • Responsive design with mobile-specific adjustments (bottom: 90px for mobile)
+   • Dynamic color coding for confidence scores:
+     - Red (#f25f5c) for scores < 5
+     - Orange (#ffaa00) for scores 5-7
+     - Green (#00fa92) for scores > 7
+   • Custom styled components using injected CSS for consistent theming
+
+5. **GPT Integration Configuration**
+   • Model: GPT-4
+   • Temperature: 0.1 (for consistent, logical outputs)
+   • Max Tokens: 2000
+   • Top P: 1.0
+   • Error handling with logging for failed API calls
+   • Structured system messages for consistent AI responses
 
 Made with ❤️ by Sabyasachi Mishra
