@@ -12,7 +12,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
-# from fpdf import FPDF  <-- PDF generation is temporarily disabled
+# PDF generation is temporarily disabled (Coming Soon)
 
 # -----------------------------------------------------------------------------
 # Logging & Environment Setup
@@ -25,12 +25,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY", "")
-logger.info("Application started in multi-call mode")
-
-# -----------------------------------------------------------------------------
-# Toggle for Demo Mode vs. Live API (LIVE MODE here)
-# -----------------------------------------------------------------------------
-CHECK_DEMO_MODE = 0  # 0 for live GPT calls
+logger.info("Application started in LIVE mode")
 
 # -----------------------------------------------------------------------------
 # CUSTOM CSS INJECTION (High Contrast & Button Styling)
@@ -90,7 +85,7 @@ def inject_custom_css():
     .stButton>button:hover {
         background-color: #ffe6e6 !important;
     }
-    /* Main Analysis button styling (if needed, customize separately) */
+    /* Main Analysis button styling (if needed) */
     #main-analysis-btn-container button {
         background-color: red !important;
         color: white !important;
@@ -130,96 +125,27 @@ def reset_analysis():
 # -----------------------------------------------------------------------------
 @st.cache_data(show_spinner=False)
 def generate_visual_analysis(feature_data: dict) -> dict:
-    if CHECK_DEMO_MODE:
-        # Demo/mock analysis data (not used in LIVE mode)
-        return {
-            "feature_name": feature_data.get("feature_name", "Demo Feature"),
-            "industry": feature_data.get("industry", "Demo Industry"),
-            "business_goal": feature_data.get("business_goal", "Demo Goal"),
-            "business_model": feature_data.get("business_model", "Demo Model"),
-            "context": feature_data.get("context", "Demo context"),
-            "overall_confidence": 8.5,
-            "rice_scores": {
-                "Reach": {"value": 8, "reason": "Large target market"},
-                "Impact": {"value": 7, "reason": "High user engagement expected"},
-                "Confidence": {"value": 9, "reason": "Based on market trends"},
-                "Effort": {"value": 4, "reason": "Moderate engineering work"},
-                "final_rice_score": 75.2
-            },
-            "moscow_priority": {
-                "category": "Must Have",
-                "justification": "Critical to MVP success"
-            },
-            "risks": {
-                "technical_complexity": "AI model integration",
-                "business_model": "Uncertain pricing strategy",
-                "adoption": "Needs user trust",
-                "competition": "Several strong players exist"
-            },
-            "business_value": {
-                "revenue_potential": "Subscription-based high ARPU",
-                "cost_savings": "Reduces fraud losses",
-                "market_positioning": "AI-powered feature differentiator"
-            },
-            "implementation": {
-                "complexity": "Medium",
-                "dependencies": "Backend infrastructure",
-                "timeline": "6-8 weeks"
-            },
-            "mvp_recommendation": "Include basic detection model + dashboard alerts.",
-            "roadmap": [
-                {
-                    "Phase": "Phase 1",
-                    "Timeline": "Month 1",
-                    "Milestone": "Prototype",
-                    "Success Metric": "Working model demo"
-                },
-                {
-                    "Phase": "Phase 2",
-                    "Timeline": "Month 2",
-                    "Milestone": "MVP Launch",
-                    "Success Metric": "First 100 users"
-                }
-            ],
-            "industry_specific_considerations": "Financial data security and compliance.",
-            "recommended_monetization": "Monthly subscription with tiered pricing.",
-            "confidence_improvement_areas": {
-                "Market Understanding": "Needs more validation interviews.",
-                "Technical Feasibility": "Confirm real-time data feasibility.",
-                "Business Impact": "More competitor benchmarks needed.",
-                "Implementation Clarity": "Clarify backend data sources."
-            },
-            "swot_analysis": {
-                "Strengths": "Strong AI capability",
-                "Weaknesses": "New to fraud domain",
-                "Opportunities": "High demand in fintech",
-                "Threats": "Regulatory shifts"
-            },
-            "assumption_line": "Assumes access to anonymized user transaction data.",
-            "clarifying_questions": [
-                "What volume of transactions per day?",
-                "What user segments will be targeted?"
-            ]
-        }
-    else:
-        # LIVE API call version
-        system_message = dedent("""
-            You are an expert-level product management consultant specializing in comprehensive, data-driven feature prioritization and analysis. Your task is to critically evaluate product features using frameworks like RICE, MoSCoW, and SWOT. 
+    """
+    Generates analysis by constructing a detailed prompt and making a live GPT API call.
+    Returns the parsed JSON response.
+    """
+    system_message = dedent("""
+        You are an expert-level product management consultant specializing in comprehensive, data-driven feature prioritization and analysis. Your task is to critically evaluate product features using frameworks like RICE, MoSCoW, and SWOT. 
 
-Adopt a conservative and realistic approach to scoring. Each rating must be backed by clear, logical, and well-supported reasoning. When making assumptions, explicitly state them. Highlight key risks, dependencies, and business impacts clearly, focusing on practical considerations for real-world implementation.
+        Adopt a conservative and realistic approach to scoring. Each rating must be backed by clear, logical, and well-supported reasoning. When making assumptions, explicitly state them. Highlight key risks, dependencies, and business impacts clearly, focusing on practical considerations for real-world implementation.
 
-If any user input lacks clarity or detail, provide specific clarifying questions to ensure you have sufficient information for a thorough analysis. Aim to proactively identify potential blind spots or gaps in the provided context.
-        """)
-        custom_instructions = dedent("""
-            Please provide a realistic confidence score on a 0-10 scale:
-            - 0-3 if the user input is nonsense or severely incomplete,
-            - 4-6 if there's partial or questionable data,
-            - 7-8 if the data is decent or typical,
-            - 9-10 if the input is extremely thorough with no ambiguities.
+        If any user input lacks clarity or detail, provide specific clarifying questions to ensure you have sufficient information for a thorough analysis. Aim to proactively identify potential blind spots or gaps in the provided context.
+    """)
+    custom_instructions = dedent("""
+        Please provide a realistic confidence score on a 0-10 scale:
+        - 0-3 if the user input is nonsense or severely incomplete,
+        - 4-6 if there's partial or questionable data,
+        - 7-8 if the data is decent or typical,
+        - 9-10 if the input is extremely thorough with no ambiguities.
     
-            Return valid JSON only with no extra text or formatting.
-        """)
-        prompt = dedent(f"""
+        Return valid JSON only with no extra text or formatting.
+    """)
+    prompt = dedent(f"""
         {custom_instructions}
     
         Analyze the following feature and provide a comprehensive evaluation in valid JSON. 
@@ -285,22 +211,22 @@ If any user input lacks clarity or detail, provide specific clarifying questions
           "assumption_line": string,
           "clarifying_questions": [string, string, ...]
         }}
-        """)
-        try:
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": system_message},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.1,
-                max_tokens=3000,
-                top_p=1.0
-            )
-            return json.loads(response.choices[0].message.content.strip())
-        except Exception as exc:
-            logger.warning(f"GPT call failed: {exc}")
-            return {}
+    """)
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.1,
+            max_tokens=3000,
+            top_p=1.0
+        )
+        return json.loads(response.choices[0].message.content.strip())
+    except Exception as exc:
+        logger.warning(f"GPT call failed: {exc}")
+        return {}
 
 # -----------------------------------------------------------------------------
 # GENERATE PDF FUNCTION (Coming Soon placeholder)
@@ -310,9 +236,10 @@ def generate_pdf(analysis_data: dict) -> bytes:
     return b"Coming Soon"
 
 # -----------------------------------------------------------------------------
-# DISPLAY ANALYSIS (Charts on Same Row; Effort Column Annotation; Old Layout)
+# DISPLAY ANALYSIS FUNCTION
 # -----------------------------------------------------------------------------
 def display_analysis(analysis_data: dict):
+    # Extract RICE scores and values
     rice_scores = analysis_data.get("rice_scores", {})
     r_vals = [
         rice_scores.get("Reach", {}).get("value", 0),
@@ -321,11 +248,10 @@ def display_analysis(analysis_data: dict):
         rice_scores.get("Effort", {}).get("value", 0)
     ]
     
-    # Create both charts and place them side-by-side in one row
+    # Display charts side-by-side using two columns
     col1, col2 = st.columns(2)
-    
     with col1:
-        # Radar Chart
+        # RICE Radar Chart
         radar_data = pd.DataFrame({
             "Metric": ["Reach", "Impact", "Confidence", "Effort"],
             "Score": r_vals
@@ -340,9 +266,8 @@ def display_analysis(analysis_data: dict):
             title="RICE Radar"
         )
         st.plotly_chart(radar_fig, use_container_width=True)
-    
     with col2:
-        # Bar Chart with annotation for Effort (less is better)
+        # RICE Bar Chart with annotation for Effort (indicating lower is better)
         bar_data = pd.DataFrame({
             "Component": ["Reach", "Impact", "Confidence", "Effort"],
             "Score": r_vals
@@ -370,11 +295,11 @@ def display_analysis(analysis_data: dict):
             pass
         st.plotly_chart(bar_fig, use_container_width=True)
     
-    # Save charts as PNGs for PDF export (using Kaleido)
+    # Save charts as PNGs for future PDF export (if needed)
     radar_fig.write_image("radar_chart.png", format="png", scale=2)
     bar_fig.write_image("bar_chart.png", format="png", scale=2)
     
-    # Display additional analysis details
+    # Display detailed analysis information
     st.header("Visual Analysis")
     
     st.subheader("RICE Justifications")
@@ -517,13 +442,12 @@ def main():
     inject_custom_css()  # Inject custom CSS
     
     # -----------------------------------------------------------------------------
-    # Sidebar Enhancements: About, Confidence, Clarifying Questions, Reset, Extras
+    # Sidebar: About, Confidence, Clarifying Questions, Reset, Extras
     # -----------------------------------------------------------------------------
     st.sidebar.markdown("## 🤖 About")
-    st.sidebar.info(
-        "Evaluate your feature ideas fast with AI-powered insights. Use the form below and receive clarifying questions from GPT in the sidebar after analysis."
-    )
+    st.sidebar.info("Evaluate your feature ideas fast with AI-powered insights. Use the form below and receive clarifying questions from GPT in the sidebar after analysis.")
     
+    # If analysis data exists, show overall confidence and clarifying questions
     if st.session_state.get("analysis_data"):
         analysis_data = st.session_state["analysis_data"]
         overall_confidence = analysis_data.get("overall_confidence", 7.0)
@@ -534,8 +458,8 @@ def main():
         else:
             conf_color = "#00fa92"
         st.sidebar.markdown(
-             f"<div style='font-size:1.1rem;'><strong>Overall Confidence:</strong> <span style='color:{conf_color};'>{overall_confidence:.1f} / 10</span></div>",
-             unsafe_allow_html=True
+            f"<div style='font-size:1.1rem;'><strong>Overall Confidence:</strong> <span style='color:{conf_color};'>{overall_confidence:.1f} / 10</span></div>",
+            unsafe_allow_html=True
         )
         
         clarifying_questions = analysis_data.get("clarifying_questions", [])
@@ -545,6 +469,7 @@ def main():
                     clarifying_answers = {}
                     for i, question in enumerate(clarifying_questions, start=1):
                         clarifying_answers[f"q{i}"] = st.text_input(f"{i}) {question}", "")
+                    # When reanalyzing, show a spinner with an estimated 45-second wait
                     reanalyze = st.form_submit_button("Submit Clarifications & Re-Analyze")
                 if reanalyze:
                     with st.spinner("Re-analyzing with clarifications... (Estimated time: 45 seconds)"):
@@ -581,7 +506,7 @@ def main():
         st.sidebar.success("Feedback submitted. Thanks for your input!")
     
     # -----------------------------------------------------------------------------
-    # Main Form & Session State Initialization
+    # Main Form: Feature Configuration
     # -----------------------------------------------------------------------------
     if "feature_name" not in st.session_state:
         st.session_state["feature_name"] = "AI-Powered Transaction Fraud Detection"
@@ -678,7 +603,7 @@ def main():
         )
     
     # -----------------------------------------------------------------------------
-    # Floating Buttons
+    # Floating Buttons (Quick Links)
     # -----------------------------------------------------------------------------
     st.markdown(
         """

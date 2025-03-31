@@ -273,3 +273,14 @@
 2025-03-31 14:55:50,360 - __main__ - INFO - Application started in multi-call mode
 2025-03-31 14:55:51,581 - __main__ - INFO - Application started in multi-call mode
 2025-03-31 14:55:52,981 - __main__ - INFO - Application started in multi-call mode
+2025-03-31 14:58:36,714 - __main__ - INFO - Application started in multi-call mode
+2025-03-31 15:03:29,877 - __main__ - INFO - Application started in multi-call mode
+2025-03-31 15:03:31,837 - __main__ - INFO - Application started in multi-call mode
+2025-03-31 15:03:32,365 - openai - INFO - error_code=None error_message="You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys." error_param=None error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2025-03-31 15:03:32,366 - __main__ - WARNING - GPT call failed: You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.
+2025-03-31 15:03:34,101 - __main__ - INFO - Application started in multi-call mode
+2025-03-31 15:07:29,585 - __main__ - INFO - Application started in LIVE mode
+2025-03-31 15:07:33,073 - __main__ - INFO - Application started in LIVE mode
+2025-03-31 15:07:33,483 - openai - INFO - error_code=None error_message="You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys." error_param=None error_type=invalid_request_error message='OpenAI API error received' stream_error=False
+2025-03-31 15:07:33,483 - __main__ - WARNING - GPT call failed: You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.
+2025-03-31 15:07:34,534 - __main__ - INFO - Application started in LIVE mode
