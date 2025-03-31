@@ -36,12 +36,12 @@ def inject_custom_css():
     /* Global high-contrast styling */
     body {
         font-family: 'Inter', sans-serif;
-        background-color: #1e1e1e;
-        color: #f0f0f0;
+        background-color: var(--bg, #1e1e1e);
+        color: var(--text, #f0f0f0);
     }
     h1, h2, h3, h4 {
         font-family: 'Montserrat', sans-serif;
-        color: #f0f0f0;
+        color: var(--text, #f0f0f0);
     }
     input, textarea, select {
         border-radius: 6px;
@@ -85,10 +85,10 @@ def inject_custom_css():
     .stButton>button:hover {
         background-color: #ffe6e6 !important;
     }
-    /* Main Analysis button styling (if needed) */
+    /* Main Analysis button styling (inside container with id "main-analysis-btn-container") */
     #main-analysis-btn-container button {
         background-color: red !important;
-        color: white !important;
+        color: red !important;
         border: none !important;
         border-radius: 6px;
         padding: 10px 20px;
@@ -112,7 +112,7 @@ if 'analysis_data' not in st.session_state:
     st.session_state['analysis_data'] = None
 
 # -----------------------------------------------------------------------------
-# STATE RESET FUNCTION
+# STATE RESET FUNCTION (Reset Analysis Option)
 # -----------------------------------------------------------------------------
 def reset_analysis():
     st.session_state['clarifications'] = ""
@@ -126,15 +126,14 @@ def reset_analysis():
 @st.cache_data(show_spinner=False)
 def generate_visual_analysis(feature_data: dict) -> dict:
     """
-    Generates analysis by constructing a detailed prompt and making a live GPT API call.
+    Constructs a detailed prompt and makes a live GPT API call.
     Returns the parsed JSON response.
     """
     system_message = dedent("""
-        You are an expert-level product management consultant specializing in comprehensive, data-driven feature prioritization and analysis. Your task is to critically evaluate product features using frameworks like RICE, MoSCoW, and SWOT.
-
-        Adopt a conservative and realistic approach to scoring. Each rating must be backed by clear, logical, and well-supported reasoning. When making assumptions, explicitly state them. Highlight key risks, dependencies, and business impacts clearly, focusing on practical considerations for real-world implementation.
-
-        If any user input lacks clarity or detail, provide specific clarifying questions to ensure you have sufficient information for a thorough analysis. Aim to proactively identify potential blind spots or gaps in the provided context.
+        You are an experienced product management assistant specializing in feature analysis.
+        Your role is to provide comprehensive, realistic, and data-driven analysis of product features.
+        You must be conservative in scoring and provide detailed justifications for all assessments.
+        Provide clarifying questions if you need more information from the user.
     """)
     custom_instructions = dedent("""
         Please provide a realistic confidence score on a 0-10 scale:
@@ -248,7 +247,7 @@ def display_analysis(analysis_data: dict):
         rice_scores.get("Effort", {}).get("value", 0)
     ]
     
-    # Display charts side-by-side using two columns
+    # Display charts side-by-side in two columns
     col1, col2 = st.columns(2)
     with col1:
         # RICE Radar Chart
@@ -267,7 +266,7 @@ def display_analysis(analysis_data: dict):
         )
         st.plotly_chart(radar_fig, use_container_width=True)
     with col2:
-        # RICE Bar Chart with annotation for Effort ("Lower is better")
+        # RICE Bar Chart with Effort annotation ("Lower is better")
         bar_data = pd.DataFrame({
             "Component": ["Reach", "Impact", "Confidence", "Effort"],
             "Score": r_vals
@@ -295,7 +294,7 @@ def display_analysis(analysis_data: dict):
             pass
         st.plotly_chart(bar_fig, use_container_width=True)
     
-    # Save charts as PNGs for future PDF export (using Kaleido)
+    # Save charts as PNGs for potential PDF export
     radar_fig.write_image("radar_chart.png", format="png", scale=2)
     bar_fig.write_image("bar_chart.png", format="png", scale=2)
     
@@ -447,7 +446,6 @@ def main():
     st.sidebar.markdown("## 🤖 About")
     st.sidebar.info("Evaluate your feature ideas fast with AI-powered insights. Use the form below and receive clarifying questions from GPT in the sidebar after analysis.")
     
-    # If analysis data exists, show overall confidence and clarifying questions
     if st.session_state.get("analysis_data"):
         analysis_data = st.session_state["analysis_data"]
         overall_confidence = analysis_data.get("overall_confidence", 7.0)
@@ -494,12 +492,11 @@ def main():
     if st.sidebar.button("Reset Analysis"):
         reset_analysis()
     
+    st.sidebar.markdown("### Extra Features")
     if st.sidebar.button("Export Analysis to PDF"):
         st.sidebar.info("Export Analysis to PDF: Coming Soon!")
-    
     if st.sidebar.button("Collaboration Mode"):
         st.sidebar.info("Collaboration Mode activated! Share your analysis with your team.")
-    
     feedback = st.sidebar.text_input("Feedback (Rate GPT's accuracy):", "")
     if st.sidebar.button("Submit Feedback"):
         st.sidebar.success("Feedback submitted. Thanks for your input!")
