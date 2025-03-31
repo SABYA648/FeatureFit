@@ -158,7 +158,7 @@ def display_analysis(analysis_data: dict):
     swot_analysis = analysis_data.get("swot_analysis", {})
     assumption_line = analysis_data.get("assumption_line", "")
 
-    # 1) Overall Confidence
+    # Overall Confidence
     if overall_confidence < 5:
         conf_color = "#f25f5c"  # bright red
     elif overall_confidence < 7:
@@ -166,7 +166,6 @@ def display_analysis(analysis_data: dict):
     else:
         conf_color = "#00fa92"  # neon green
 
-    # Center analysis visuals
     st.header("Visual Analysis")
 
     # RICE Score
@@ -186,7 +185,6 @@ def display_analysis(analysis_data: dict):
             "Metric": ["Reach","Impact","Confidence","Effort"],
             "Score": r_vals
         })
-        # Use futuristic color palette
         radar_fig = px.line_polar(
             radar_data,
             r="Score",
@@ -204,7 +202,7 @@ def display_analysis(analysis_data: dict):
         gauge_fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=final_rice_score,
-            title={"text": "Feature Priority", "font": {"color": "#94d0ff"}},
+            title={"text": "Feature Priority"},
             gauge={
                 'axis': {'range': [0, 100], 'tickcolor': "#aaa", "tickwidth":1},
                 'bar': {'color': "#00fa92"},
@@ -214,13 +212,8 @@ def display_analysis(analysis_data: dict):
                     {'range': [40, 70], 'color': "#b5838d"},
                     {'range': [70, 100], 'color': "#00b8d9"}
                 ]
-            },
-            number={"font":{"color":"#94d0ff"}}
+            }
         ))
-        gauge_fig.update_layout(
-            paper_bgcolor="#1d1f27",
-            font={"color":"#94d0ff"}
-        )
         st.plotly_chart(gauge_fig, use_container_width=True)
 
     # RICE Justifications
@@ -282,11 +275,6 @@ def display_analysis(analysis_data: dict):
         title="RICE Components"
     )
     bar_fig.update_traces(textfont_size=12, textangle=0, textposition="outside")
-    bar_fig.update_layout(
-        plot_bgcolor="#1d1f27",
-        paper_bgcolor="#1d1f27",
-        font={"color":"#94d0ff"}
-    )
     st.plotly_chart(bar_fig, use_container_width=True)
 
     # Risks
@@ -400,68 +388,6 @@ def main():
 
     st.title("🚀 FeatureFit: AI-Powered Feature Prioritization")
 
-    # Insert global CSS to transform everything to a hi-tech, modern theme
-    st.markdown(
-        """
-        <style>
-        /* Global background and text color */
-        body, .css-12oz5g7, .css-1dp5vir {
-            background-color: #1d1f27 !important;
-            color: #94d0ff !important;
-        }
-
-        /* Headers, subheaders styling */
-        h1, h2, h3, h4, h5, h6 {
-            color: #00ffa2 !important;
-        }
-
-        /* Make forms and containers have a mild neon border */
-        .stTextInput, .stSelectbox, .stTextArea, .stDataFrame, .stTable {
-            border: 1px solid #3c3c6c !important;
-            background-color: #2f3142 !important;
-        }
-        .stDataFrame table, .stTable table {
-            background-color: #2f3142 !important;
-            color: #94d0ff !important;
-        }
-
-        /* Buttons */
-        .stButton>button {
-            background-color: #282a35 !important;
-            color: #94d0ff !important;
-            border: 1px solid #00b8d9;
-            transition: background 0.2s, color 0.2s;
-        }
-        .stButton>button:hover {
-            background-color: #00b8d9 !important;
-            color: #1d1f27 !important;
-        }
-
-        /* Toast/spinner */
-        .stSpinner, .stToast {
-            background-color: #2f3142 !important;
-            color:#94d0ff !important;
-        }
-
-        /* Sidebar specifics */
-        [data-testid="stSidebar"] > div {
-            background-color: #282a35 !important;
-        }
-
-        /* Horizontal lines, headings, code blocks */
-        hr {
-            border-top: 1px solid #ffffff33 !important;
-        }
-
-        code, pre {
-            background-color: #2f3142 !important;
-            color: #94d0ff !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
     # SIDEBAR placeholders
     st.sidebar.markdown("## About")
     st.sidebar.markdown("""
@@ -472,6 +398,7 @@ they will appear here in the sidebar after the first analysis.
     placeholder_confidence = st.sidebar.empty()
     placeholder_assumptions = st.sidebar.empty()
     placeholder_clarifying = st.sidebar.empty()
+
     st.sidebar.markdown("## Quick Links")
     st.sidebar.markdown("[Portfolio](https://sabyasachimishra.dev)")
     st.sidebar.markdown("[LinkedIn](https://www.linkedin.com/in/sabyasachimishra007)")
@@ -495,6 +422,7 @@ they will appear here in the sidebar after the first analysis.
     # Industry options
     _industries = ["FinTech", "EdTech", "SaaS", "Healthcare", "E-commerce", "AI Tools", "Custom"]
 
+    # MAIN FORM
     with st.form("analysis_form"):
         st.header("📌 Feature Configuration")
         col1, col2 = st.columns(2)
@@ -554,7 +482,7 @@ they will appear here in the sidebar after the first analysis.
 
     # If user clicks analyze
     if submitted:
-        with st.spinner("Generating final analysis (visual only)..."):
+        with st.spinner("Generating final analysis (takes upto 45 seconds)..."):
             feature_data = {
                 "feature_name": st.session_state["feature_name"],
                 "industry": st.session_state["industry"],
@@ -629,11 +557,10 @@ they will appear here in the sidebar after the first analysis.
                         display_analysis(st.session_state["analysis_data"])
                     else:
                         st.warning("Re-analysis did not return any result. Please retry.")
-                return  # end function
+                return  
         else:
             placeholder_clarifying.markdown("")
 
-        # If clarifications not triggered or no clarifying questions, display analysis
         display_analysis(analysis_data)
     else:
         st.markdown(
