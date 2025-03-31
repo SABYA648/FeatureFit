@@ -129,11 +129,12 @@ def generate_visual_analysis(feature_data: dict) -> dict:
     Constructs a detailed prompt and makes a live GPT API call.
     Returns the parsed JSON response.
     """
+    # Updated system message to force clarifying_questions and overall_confidence in output.
     system_message = dedent("""
         You are an experienced product management assistant specializing in feature analysis.
         Your role is to provide comprehensive, realistic, and data-driven analysis of product features.
         You must be conservative in scoring and provide detailed justifications for all assessments.
-        Provide clarifying questions if you need more information from the user.
+        Always include an "overall_confidence" score (0-10) and a "clarifying_questions" array (even if empty) in your response.
     """)
     custom_instructions = dedent("""
         Please provide a realistic confidence score on a 0-10 scale:
@@ -211,6 +212,8 @@ def generate_visual_analysis(feature_data: dict) -> dict:
           "clarifying_questions": [string, string, ...]
         }}
     """)
+    if not openai.api_key:
+        return {}
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4",
@@ -247,7 +250,7 @@ def display_analysis(analysis_data: dict):
         rice_scores.get("Effort", {}).get("value", 0)
     ]
     
-    # Display charts side-by-side in two columns
+    # Display charts side-by-side using two columns
     col1, col2 = st.columns(2)
     with col1:
         # RICE Radar Chart
@@ -294,7 +297,7 @@ def display_analysis(analysis_data: dict):
             pass
         st.plotly_chart(bar_fig, use_container_width=True)
     
-    # Save charts as PNGs for potential PDF export
+    # Save charts as PNGs for future PDF export (using Kaleido)
     radar_fig.write_image("radar_chart.png", format="png", scale=2)
     bar_fig.write_image("bar_chart.png", format="png", scale=2)
     
@@ -446,6 +449,7 @@ def main():
     st.sidebar.markdown("## 🤖 About")
     st.sidebar.info("Evaluate your feature ideas fast with AI-powered insights. Use the form below and receive clarifying questions from GPT in the sidebar after analysis.")
     
+    # If analysis data exists, show overall confidence and clarifying questions
     if st.session_state.get("analysis_data"):
         analysis_data = st.session_state["analysis_data"]
         overall_confidence = analysis_data.get("overall_confidence", 7.0)
@@ -475,6 +479,7 @@ def main():
                             ans_text = clarifying_answers.get(f"q{i}", "").strip()
                             if ans_text:
                                 new_clar_part += f"\n[QUESTION]: {question}\n[ANSWER]: {ans_text}\n"
+                        # Append new clarifications to session state
                         st.session_state["clarifications"] += new_clar_part
                         new_feature_data = {
                             "feature_name": st.session_state["feature_name"],
@@ -488,6 +493,8 @@ def main():
                             st.sidebar.success("Re-analysis completed with clarifications.")
                         else:
                             st.sidebar.warning("Re-analysis did not return any result. Please retry.")
+        else:
+            st.sidebar.markdown("No clarifying questions returned. Your input may be complete.")
     
     if st.sidebar.button("Reset Analysis"):
         reset_analysis()
