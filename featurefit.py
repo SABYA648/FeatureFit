@@ -12,7 +12,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
-from fpdf import FPDF
+# from fpdf import FPDF  <-- PDF generation is temporarily disabled
 
 # -----------------------------------------------------------------------------
 # Logging & Environment Setup
@@ -204,10 +204,11 @@ def generate_visual_analysis(feature_data: dict) -> dict:
     else:
         # Live API call version (if not in demo mode)
         system_message = dedent("""
-            You are an experienced product management assistant specializing in feature analysis.
-            Your role is to provide comprehensive, realistic, and data-driven analysis of product features.
-            You must be conservative in scoring and provide detailed justifications for all assessments.
-            Provide clarifying questions if you need more information from the user.
+            You are an expert-level product management consultant specializing in comprehensive, data-driven feature prioritization and analysis. Your task is to critically evaluate product features using frameworks like RICE, MoSCoW, and SWOT. 
+
+Adopt a conservative and realistic approach to scoring. Each rating must be backed by clear, logical, and well-supported reasoning. When making assumptions, explicitly state them. Highlight key risks, dependencies, and business impacts clearly, focusing on practical considerations for real-world implementation.
+
+If any user input lacks clarity or detail, provide specific clarifying questions to ensure you have sufficient information for a thorough analysis. Aim to proactively identify potential blind spots or gaps in the provided context.
         """)
         custom_instructions = dedent("""
             Please provide a realistic confidence score on a 0-10 scale:
@@ -302,140 +303,14 @@ def generate_visual_analysis(feature_data: dict) -> dict:
             return {}
 
 # -----------------------------------------------------------------------------
-# PDF GENERATION (with Chart PNGs embedded)
+# GENERATE PDF FUNCTION (Coming Soon placeholder)
 # -----------------------------------------------------------------------------
-class PDF(FPDF):
-    def __init__(self):
-        super().__init__()
-        # Add Unicode fonts; ensure both TTF files are in the working directory
-        self.add_font('DejaVu', '', 'DejaVuSans.ttf', uni=True)
-        self.add_font('DejaVu', 'B', 'DejaVuSans-Bold.ttf', uni=True)
-        self.set_font("DejaVu", "", 12)
-        self.add_page()
-        self.set_auto_page_break(auto=True, margin=15)
-        
-    def header(self):
-        # Use the bold font for the header
-        self.set_font("DejaVu", "B", 14)
-        self.cell(0, 10, "FeatureFit AI Analysis Report", ln=1, align="C")
-        self.ln(5)
-
-    def section_title(self, title):
-        self.set_font("DejaVu", "B", 12)
-        self.set_text_color(220, 50, 50)  # Red
-        # Remove non-ascii characters if necessary (for emojis)
-        title = title.encode("ascii", "ignore").decode("ascii")
-        self.cell(0, 10, title, ln=1)
-        self.set_text_color(0, 0, 0)
-
-    def section_body(self, text):
-        self.set_font("DejaVu", "", 11)
-        self.multi_cell(0, 8, text)
-        self.ln(2)
-
 def generate_pdf(analysis_data: dict) -> bytes:
-    pdf = PDF()
-    
-    # Feature Overview
-    pdf.section_title("Feature Overview")
-    overview_text = f"""
-Feature Name: {analysis_data.get('feature_name','N/A')}
-Industry: {analysis_data.get('industry','N/A')}
-Business Goal: {analysis_data.get('business_goal','N/A')}
-Business Model: {analysis_data.get('business_model','N/A')}
-Overall Confidence: {analysis_data.get('overall_confidence','N/A')} / 10
-    """
-    pdf.section_body(overview_text.strip())
-    
-    # Insert Radar Chart PNG if exists
-    if os.path.exists("radar_chart.png"):
-        pdf.image("radar_chart.png", w=180)
-    
-    # RICE Scores
-    rice = analysis_data.get("rice_scores", {})
-    pdf.section_title("RICE Scoring")
-    for metric in ["Reach", "Impact", "Confidence", "Effort"]:
-        data = rice.get(metric, {})
-        val = data.get("value", "N/A")
-        reason = data.get("reason", "N/A")
-        pdf.section_body(f"{metric}: {val}\nReason: {reason}")
-    pdf.section_body(f"Final RICE Score: {rice.get('final_rice_score','N/A')}")
-    
-    # Insert Bar Chart PNG if exists
-    if os.path.exists("bar_chart.png"):
-        pdf.image("bar_chart.png", w=180)
-    
-    # MoSCoW Priority
-    pdf.section_title("MoSCoW Priority")
-    moscow = analysis_data.get("moscow_priority", {})
-    pdf.section_body(f"Category: {moscow.get('category','N/A')}\nJustification: {moscow.get('justification','N/A')}")
-    
-    # Risks
-    pdf.section_title("Risk Assessment")
-    risks = analysis_data.get("risks", {})
-    for k, v in risks.items():
-        pdf.section_body(f"{k.replace('_', ' ').title()}: {v}")
-    
-    # Business Value
-    pdf.section_title("Business Value")
-    business = analysis_data.get("business_value", {})
-    for k, v in business.items():
-        pdf.section_body(f"{k.replace('_', ' ').title()}: {v}")
-    
-    # Implementation
-    pdf.section_title("Implementation")
-    implementation = analysis_data.get("implementation", {})
-    for k, v in implementation.items():
-        pdf.section_body(f"{k.replace('_', ' ').title()}: {v}")
-    
-    # MVP Recommendation
-    pdf.section_title("MVP Recommendation")
-    pdf.section_body(analysis_data.get("mvp_recommendation", "N/A"))
-    
-    # Roadmap
-    pdf.section_title("Roadmap")
-    roadmap = analysis_data.get("roadmap", [])
-    for phase in roadmap:
-        phase_txt = "\n".join([f"{k}: {v}" for k, v in phase.items()])
-        pdf.section_body(phase_txt)
-    
-    # Industry Specific Considerations
-    pdf.section_title("Industry Considerations")
-    pdf.section_body(analysis_data.get("industry_specific_considerations", "N/A"))
-    
-    # Monetization
-    pdf.section_title("Monetization Strategy")
-    pdf.section_body(analysis_data.get("recommended_monetization", "N/A"))
-    
-    # Confidence Improvement
-    pdf.section_title("Confidence Improvement Areas")
-    confidence = analysis_data.get("confidence_improvement_areas", {})
-    for k, v in confidence.items():
-        pdf.section_body(f"{k}: {v}")
-    
-    # SWOT Analysis
-    pdf.section_title("SWOT Analysis")
-    swot = analysis_data.get("swot_analysis", {})
-    for k, v in swot.items():
-        pdf.section_body(f"{k}: {v}")
-    
-    # Assumptions
-    pdf.section_title("Assumptions")
-    pdf.section_body(analysis_data.get("assumption_line", "N/A"))
-    
-    # Clarifications (Questions and Answers)
-    pdf.section_title("Clarifications")
-    questions = analysis_data.get("clarifying_questions", [])
-    if questions:
-        pdf.section_body("Questions:\n" + "\n".join(questions))
-    clarifications = st.session_state.get("clarifications", "").strip()
-    if clarifications:
-        pdf.section_body("User Answers:\n" + clarifications)
-    
-    return pdf.output(dest="S").encode("utf-8")
+    # For now, simply return a placeholder message
+    return b"Coming Soon"
 
 # -----------------------------------------------------------------------------
-# DISPLAY ANALYSIS (Including Chart Display and saving PNGs)
+# DISPLAY ANALYSIS (Charts on Same Row; Effort Column Annotation; Old Layout)
 # -----------------------------------------------------------------------------
 def display_analysis(analysis_data: dict):
     rice_scores = analysis_data.get("rice_scores", {})
@@ -446,44 +321,63 @@ def display_analysis(analysis_data: dict):
         rice_scores.get("Effort", {}).get("value", 0)
     ]
     
-    # Radar Chart
-    radar_data = pd.DataFrame({
-        "Metric": ["Reach", "Impact", "Confidence", "Effort"],
-        "Score": r_vals
-    })
-    radar_fig = px.line_polar(
-        radar_data,
-        r="Score",
-        theta="Metric",
-        line_close=True,
-        color_discrete_sequence=['#ffcc00'],
-        template="plotly_dark"
-    )
-    st.plotly_chart(radar_fig, use_container_width=True)
+    # Create both charts and place them side-by-side
+    col1, col2 = st.columns(2)
     
-    # Bar Chart
-    bar_data = pd.DataFrame({
-        "Component": ["Reach", "Impact", "Confidence", "Effort"],
-        "Score": r_vals
-    })
-    bar_fig = px.bar(
-        bar_data,
-        x="Component",
-        y="Score",
-        color="Component",
-        color_discrete_sequence=['#00fa92','#b5838d','#ffae00','#00b8d9'],
-        text="Score",
-        title="RICE Components"
-    )
-    bar_fig.update_traces(textfont_size=12, textangle=0, textposition="outside")
-    st.plotly_chart(bar_fig, use_container_width=True)
+    with col1:
+        # Radar Chart
+        radar_data = pd.DataFrame({
+            "Metric": ["Reach", "Impact", "Confidence", "Effort"],
+            "Score": r_vals
+        })
+        radar_fig = px.line_polar(
+            radar_data,
+            r="Score",
+            theta="Metric",
+            line_close=True,
+            color_discrete_sequence=['#ffcc00'],
+            template="plotly_dark",
+            title="RICE Radar"
+        )
+        st.plotly_chart(radar_fig, use_container_width=True)
     
-    # Save charts as PNG for PDF export (using Kaleido)
+    with col2:
+        # Bar Chart with annotation for Effort (less is better)
+        bar_data = pd.DataFrame({
+            "Component": ["Reach", "Impact", "Confidence", "Effort"],
+            "Score": r_vals
+        })
+        bar_fig = px.bar(
+            bar_data,
+            x="Component",
+            y="Score",
+            color="Component",
+            color_discrete_sequence=['#00fa92','#b5838d','#ffae00','#00b8d9'],
+            text="Score",
+            title="RICE Components"
+        )
+        bar_fig.update_traces(textfont_size=12, textangle=0, textposition="outside")
+        # Add annotation for Effort to indicate lower is better
+        try:
+            effort_value = bar_data.loc[bar_data["Component"] == "Effort", "Score"].iloc[0]
+            bar_fig.add_annotation(
+                x="Effort",
+                y=effort_value + 5,
+                text="Lower is better",
+                showarrow=False,
+                font=dict(color="#ffcc00", size=12)
+            )
+        except Exception:
+            pass
+        st.plotly_chart(bar_fig, use_container_width=True)
+    
+    # Save charts as PNGs for PDF export (if needed)
     radar_fig.write_image("radar_chart.png", format="png", scale=2)
     bar_fig.write_image("bar_chart.png", format="png", scale=2)
     
     # Display additional analysis details
     st.header("Visual Analysis")
+    
     st.subheader("RICE Justifications")
     justifications_list = []
     for comp in ["Reach", "Impact", "Confidence", "Effort"]:
@@ -678,16 +572,7 @@ def main():
         reset_analysis()
     
     if st.sidebar.button("Export Analysis to PDF"):
-        if st.session_state.get("analysis_data"):
-            pdf_bytes = generate_pdf(st.session_state["analysis_data"])
-            st.sidebar.download_button(
-                label="Download Analysis PDF",
-                data=pdf_bytes,
-                file_name="analysis_report.pdf",
-                mime="application/pdf",
-            )
-        else:
-            st.sidebar.warning("No analysis data to export. Run analysis first.")
+        st.sidebar.info("Export Analysis to PDF: Coming Soon!")
     
     if st.sidebar.button("Collaboration Mode"):
         st.sidebar.info("Collaboration Mode activated! Share your analysis with your team.")
