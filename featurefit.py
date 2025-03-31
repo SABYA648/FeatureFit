@@ -12,7 +12,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
-# PDF generation is temporarily disabled (Coming Soon)
+# PDF generation is currently disabled (Coming Soon)
 
 # -----------------------------------------------------------------------------
 # Logging & Environment Setup
@@ -130,7 +130,7 @@ def generate_visual_analysis(feature_data: dict) -> dict:
     Returns the parsed JSON response.
     """
     system_message = dedent("""
-        You are an expert-level product management consultant specializing in comprehensive, data-driven feature prioritization and analysis. Your task is to critically evaluate product features using frameworks like RICE, MoSCoW, and SWOT. 
+        You are an expert-level product management consultant specializing in comprehensive, data-driven feature prioritization and analysis. Your task is to critically evaluate product features using frameworks like RICE, MoSCoW, and SWOT.
 
         Adopt a conservative and realistic approach to scoring. Each rating must be backed by clear, logical, and well-supported reasoning. When making assumptions, explicitly state them. Highlight key risks, dependencies, and business impacts clearly, focusing on practical considerations for real-world implementation.
 
@@ -142,14 +142,14 @@ def generate_visual_analysis(feature_data: dict) -> dict:
         - 4-6 if there's partial or questionable data,
         - 7-8 if the data is decent or typical,
         - 9-10 if the input is extremely thorough with no ambiguities.
-    
+
         Return valid JSON only with no extra text or formatting.
     """)
     prompt = dedent(f"""
         {custom_instructions}
     
-        Analyze the following feature and provide a comprehensive evaluation in valid JSON. 
-        The user does NOT want to display raw JSON on screen, only final visuals. 
+        Analyze the following feature and provide a comprehensive evaluation in valid JSON.
+        The user does NOT want to display raw JSON on screen, only final visuals.
         Also provide any clarifying questions you'd like to ask the user as a JSON array named "clarifying_questions".
     
         Feature Details:
@@ -267,7 +267,7 @@ def display_analysis(analysis_data: dict):
         )
         st.plotly_chart(radar_fig, use_container_width=True)
     with col2:
-        # RICE Bar Chart with annotation for Effort (indicating lower is better)
+        # RICE Bar Chart with annotation for Effort ("Lower is better")
         bar_data = pd.DataFrame({
             "Component": ["Reach", "Impact", "Confidence", "Effort"],
             "Score": r_vals
@@ -295,11 +295,11 @@ def display_analysis(analysis_data: dict):
             pass
         st.plotly_chart(bar_fig, use_container_width=True)
     
-    # Save charts as PNGs for future PDF export (if needed)
+    # Save charts as PNGs for future PDF export (using Kaleido)
     radar_fig.write_image("radar_chart.png", format="png", scale=2)
     bar_fig.write_image("bar_chart.png", format="png", scale=2)
     
-    # Display detailed analysis information
+    # Display additional analysis details
     st.header("Visual Analysis")
     
     st.subheader("RICE Justifications")
@@ -469,7 +469,6 @@ def main():
                     clarifying_answers = {}
                     for i, question in enumerate(clarifying_questions, start=1):
                         clarifying_answers[f"q{i}"] = st.text_input(f"{i}) {question}", "")
-                    # When reanalyzing, show a spinner with an estimated 45-second wait
                     reanalyze = st.form_submit_button("Submit Clarifications & Re-Analyze")
                 if reanalyze:
                     with st.spinner("Re-analyzing with clarifications... (Estimated time: 45 seconds)"):
