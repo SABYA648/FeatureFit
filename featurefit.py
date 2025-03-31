@@ -28,9 +28,9 @@ openai.api_key = os.getenv("OPENAI_API_KEY", "")
 logger.info("Application started in multi-call mode")
 
 # -----------------------------------------------------------------------------
-# Toggle for Demo Mode vs. Live API
+# Toggle for Demo Mode vs. Live API (LIVE MODE here)
 # -----------------------------------------------------------------------------
-CHECK_DEMO_MODE = 1  # Set 1 for demo/mock mode; 0 for live GPT calls
+CHECK_DEMO_MODE = 0  # 0 for live GPT calls
 
 # -----------------------------------------------------------------------------
 # CUSTOM CSS INJECTION (High Contrast & Button Styling)
@@ -74,7 +74,7 @@ def inject_custom_css():
         background-color: #2e2e2e;
         color: #f0f0f0;
     }
-    .css-1d391kg {  
+    .css-1d391kg {
         background-color: #444444;
         color: #f0f0f0;
     }
@@ -126,12 +126,12 @@ def reset_analysis():
     st.success("Analysis state has been reset. Clean slate, just like you needed!")
 
 # -----------------------------------------------------------------------------
-# GENERATE VISUAL ANALYSIS FUNCTION (Demo vs. Live API)
+# GENERATE VISUAL ANALYSIS FUNCTION (LIVE MODE)
 # -----------------------------------------------------------------------------
 @st.cache_data(show_spinner=False)
 def generate_visual_analysis(feature_data: dict) -> dict:
     if CHECK_DEMO_MODE:
-        # Demo/mock analysis data
+        # Demo/mock analysis data (not used in LIVE mode)
         return {
             "feature_name": feature_data.get("feature_name", "Demo Feature"),
             "industry": feature_data.get("industry", "Demo Industry"),
@@ -202,7 +202,7 @@ def generate_visual_analysis(feature_data: dict) -> dict:
             ]
         }
     else:
-        # Live API call version (if not in demo mode)
+        # LIVE API call version
         system_message = dedent("""
             You are an expert-level product management consultant specializing in comprehensive, data-driven feature prioritization and analysis. Your task is to critically evaluate product features using frameworks like RICE, MoSCoW, and SWOT. 
 
@@ -321,7 +321,7 @@ def display_analysis(analysis_data: dict):
         rice_scores.get("Effort", {}).get("value", 0)
     ]
     
-    # Create both charts and place them side-by-side
+    # Create both charts and place them side-by-side in one row
     col1, col2 = st.columns(2)
     
     with col1:
@@ -357,7 +357,6 @@ def display_analysis(analysis_data: dict):
             title="RICE Components"
         )
         bar_fig.update_traces(textfont_size=12, textangle=0, textposition="outside")
-        # Add annotation for Effort to indicate lower is better
         try:
             effort_value = bar_data.loc[bar_data["Component"] == "Effort", "Score"].iloc[0]
             bar_fig.add_annotation(
@@ -371,7 +370,7 @@ def display_analysis(analysis_data: dict):
             pass
         st.plotly_chart(bar_fig, use_container_width=True)
     
-    # Save charts as PNGs for PDF export (if needed)
+    # Save charts as PNGs for PDF export (using Kaleido)
     radar_fig.write_image("radar_chart.png", format="png", scale=2)
     bar_fig.write_image("bar_chart.png", format="png", scale=2)
     
@@ -548,7 +547,7 @@ def main():
                         clarifying_answers[f"q{i}"] = st.text_input(f"{i}) {question}", "")
                     reanalyze = st.form_submit_button("Submit Clarifications & Re-Analyze")
                 if reanalyze:
-                    with st.spinner("Re-analyzing with clarifications..."):
+                    with st.spinner("Re-analyzing with clarifications... (Estimated time: 45 seconds)"):
                         new_clar_part = ""
                         for i, question in enumerate(clarifying_questions, start=1):
                             ans_text = clarifying_answers.get(f"q{i}", "").strip()
@@ -686,7 +685,7 @@ def main():
         <style>
         .float-btns {
             position: fixed;
-            bottom: 20px; 
+            bottom: 20px;
             right: 20px;
             display: flex;
             flex-direction: column;
@@ -696,7 +695,7 @@ def main():
         .float-btns a {
             text-decoration: none;
             font-size: 14px;
-            background: #4a5eab; 
+            background: #4a5eab;
             color: #fff;
             padding: 8px 12px;
             border-radius: 8px;
@@ -708,7 +707,7 @@ def main():
         }
         @media screen and (max-width: 768px) {
             .float-btns {
-                bottom: 90px; 
+                bottom: 90px;
                 right: 10px;
                 gap: 12px;
                 padding: 16px;
